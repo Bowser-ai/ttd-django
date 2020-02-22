@@ -23,12 +23,19 @@ class NewVisitorTest(unittest.TestCase):
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)
 
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('Use Peacock feather to make a fly')
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(1)
+
         table = self.browser.find_element_by_id('id_list_table')
         rows = self.browser.find_elements_by_tag_name('tr')
 
-        self.assertTrue(any(row.text == '1: Buy Peacock Feathers' for row in rows),
-                'list item did not appear in the table')
+        self.assertIn('1: Buy Peacock Feathers', [row.text for row in rows],
+                f'list item did not appear in the table, item in table: {table.text}')
 
+        self.assertIn('2: Use Peacock feather to make a fly', [row.text for row in rows],
+                f'list item did not appear in the table, item in table: {table.text}')
 
 
         self.fail('Finish the test')
