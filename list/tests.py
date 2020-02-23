@@ -21,16 +21,7 @@ class HomePageTest(TestCase):
 
         response = self.client.post('/', data={'item_text':'new_item'})
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
-
-    def test_multiple_list_items_shown(self):
-        response = self.client.get('/')
-        Item.objects.create(text='item_1')
-        Item.objects.create(text='item_2')
-
-        self.assertIn('item_1', response.content.decode('utf8'))
-        self.assertIn('item_2', response.content.decode('utf8'))
-                
+        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
 
 class ItemModelTest(TestCase):
 
@@ -55,5 +46,21 @@ class ItemModelTest(TestCase):
 
         self.assertEqual(first_saved_item.text, 'the first (ever) list item')
         self.assertEqual(second_saved_item.text, 'the second list item')
+
+class ListViewTest(TestCase):
+
+    def test_uses_list_template(self):
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response, 'list/list.html')
+
+    def test_displays_all_items(self):
+
+        Item.objects.create(text='itemey1')
+        Item.objects.create(text='itemey2')
+
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertContains(response, 'itemey1')
+        self.assertContains(response, 'itemey2')
+
 
                 
