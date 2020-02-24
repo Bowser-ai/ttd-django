@@ -77,7 +77,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.wait_for_row_list_table('1: Buy Milk')
 
         second_user_url = self.browser.current_url
-        assertRegex(second_user_url, '/lists/+./')
+        self.assertRegex(second_user_url, '/lists/+./')
 
         body_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy Peacock Feathers', body_text)
