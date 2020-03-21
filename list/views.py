@@ -11,27 +11,22 @@ def home_page(request):
 
 def list_view(request, list_id):
     list_ = List.objects.get(id=list_id)
-    context = {'list' : list_, 'error': None}
+    form = ItemForm()
     if request.method == 'POST':
-        item = Item(list=list_, text=request.POST.get('text'))
-        try:
-            item.full_clean()
-            item.save()
+        form = ItemForm(data=request.POST)
+        if form.is_valid():
+            Item.objects.create(text=request.POST['text'], list=list_)
             return redirect(list_)
 
-        except ValidationError:
-            context['error'] = "You can't have an empty list item"
-
-    return render(request, 'list/list.html', context) 
+    return render(request, 'list/list.html', {'list': list_, 'form': form}) 
 
 def new_list(request):
-    list_ = List.objects.create()
-    item = Item(text=request.POST['text'], list=list_)
-    try:
-        item.full_clean()
-        item.save()
-    except ValidationError:
-        list_.delete()
-        expected_error = "You can't have an empty list item"
-        return render(request, 'list/home.html', {'error': expected_error})
-    return redirect(list_)
+    form = ItemForm(data=request.POST)
+    if form.is_valid():
+        list_ = List.objects.create()
+        Item.objects.create(text=request.POST['text'], list=list_)
+        return redirect(list_)
+
+    else:
+        return render(request, 'list/home.html', {'form': form})
+
