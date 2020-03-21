@@ -11,7 +11,7 @@ class NewVisitorTest(FunctionalTest):
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
 
-        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box = self.get_item_input_box()
         self.assertEqual(input_box.get_attribute('placeholder'),
                 'Enter a to-do item')
 
@@ -19,7 +19,7 @@ class NewVisitorTest(FunctionalTest):
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_list_table('1: Buy Peacock Feathers')
 
-        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box = self.get_item_input_box()
         input_box.send_keys('Use Peacock feathers to make a fly')
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_list_table('2: Use Peacock feathers to make a fly')
@@ -28,7 +28,7 @@ class NewVisitorTest(FunctionalTest):
 
     def test_multiple_users_can_start_list_at_different_urls(self):
         self.browser.get(self.live_server_url)
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy Peacock Feathers')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_list_table('1: Buy Peacock Feathers')
@@ -43,7 +43,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertNotIn('Buy Peacock Feathers', body_text)
         self.assertNotIn('feathers to make a fly', body_text)
 
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy Milk')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_list_table('1: Buy Milk')

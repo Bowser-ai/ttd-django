@@ -13,7 +13,7 @@ def list_view(request, list_id):
     list_ = List.objects.get(id=list_id)
     context = {'list' : list_, 'error': None}
     if request.method == 'POST':
-        item = Item(list=list_, text=request.POST.get('item_text'))
+        item = Item(list=list_, text=request.POST.get('text'))
         try:
             item.full_clean()
             item.save()
@@ -26,13 +26,12 @@ def list_view(request, list_id):
 
 def new_list(request):
     list_ = List.objects.create()
-    item = Item(text=request.POST['item_text'], list=list_)
+    item = Item(text=request.POST['text'], list=list_)
     try:
         item.full_clean()
         item.save()
     except ValidationError:
         list_.delete()
         expected_error = "You can't have an empty list item"
-
         return render(request, 'list/home.html', {'error': expected_error})
     return redirect(list_)

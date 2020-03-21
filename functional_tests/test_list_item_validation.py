@@ -6,7 +6,7 @@ class ItemValidationTest(FunctionalTest):
 
     def test_cannot_add_empty_list_items(self):
         self.browser.get(self.live_server_url)
-        input_box = self.browser.find_element_by_id('id_new_item')        
+        input_box = self.get_item_input_box()
         input_box.send_keys(Keys.ENTER)
 
 
@@ -15,13 +15,13 @@ class ItemValidationTest(FunctionalTest):
                 'You can\'t have an empty list item'
                 ))
 
-        input_box = self.browser.find_element_by_id('id_new_item')        
+        input_box = self.get_item_input_box()
         input_box.send_keys('Buy milk')
         input_box.send_keys(Keys.ENTER)
 
         self.wait_for_row_list_table('1: Buy milk')
 
-        input_box = self.browser.find_element_by_id('id_new_item')        
+        input_box = self.get_item_input_box()
         input_box.send_keys(Keys.ENTER)
 
 
@@ -30,7 +30,7 @@ class ItemValidationTest(FunctionalTest):
                 'You can\'t have an empty list item'
                 ))
 
-        input_box = self.browser.find_element_by_id('id_new_item')        
+        input_box = self.get_item_input_box()
         input_box.send_keys('Buy tea')
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_list_table('1: Buy milk')
