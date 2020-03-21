@@ -2,14 +2,20 @@ from django.test import TestCase
 from django.urls import resolve
 from django.http import HttpRequest
 from django.utils.html import escape
+
 from list.views import home_page
 from list.models import Item, List
+from list.forms import ItemForm
 
 class HomePageTest(TestCase):
 
     def test_home_page_returns_correct_html(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'list/home.html')
+
+    def test_home_page_uses_item_form(self):
+        response = self.client.get('/')
+        self.assertIsInstance(response.context['form'], ItemForm)
 
 
 class ListViewTest(TestCase):
