@@ -6,7 +6,7 @@ from django.contrib import messages
 def send_login_email(request):
     email = request.POST.get('email', None)
     send_mail('Your login link for Superlists',
-            'body',
+            'Use this link to log in',
             'noreply@superlists.com',
             [email]
             )
